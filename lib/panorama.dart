@@ -295,6 +295,7 @@ class _PanoramaState extends State<Panorama>
   }
 
   void _updateSensorControl() {
+    // NORIEGA WAS HERE
     _orientationSubscription?.cancel();
     switch (widget.sensorControl) {
       case SensorControl.Orientation:
@@ -309,8 +310,8 @@ class _PanoramaState extends State<Panorama>
       case SensorControl.AbsoluteOrientation:
         motionSensors.absoluteOrientationUpdateInterval =
             Duration.microsecondsPerSecond ~/ 60;
-        _orientationSubscription =
-            motionSensors.orientation.listen((OrientationEvent event) {
+        _orientationSubscription = motionSensors.absoluteOrientation
+            .listen((AbsoluteOrientationEvent event) {
           // Forzar siempre horizontal (pitch = 0)
           orientation.setValues(event.yaw, 0.0, event.roll);
         });
