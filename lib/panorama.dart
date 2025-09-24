@@ -302,22 +302,8 @@ class _PanoramaState extends State<Panorama>
             Duration.microsecondsPerSecond ~/ 60;
         _orientationSubscription =
             motionSensors.orientation.listen((OrientationEvent event) {
-          final context = this.context;
-          final orientationScreen = MediaQuery.of(context).orientation;
-
-          // Si la UI está en landscape pero el sensor reporta valores de portrait (pitch muy alto o bajo)
-          // Forzamos el pitch a 0 para mantener horizontal
-          double pitch = event.pitch;
-          if (orientationScreen == Orientation.landscape) {
-            // Si el pitch está fuera del rango típico de landscape, forzamos a 0
-            if (pitch > 1.0 || pitch < -1.0) {
-              pitch = 0.0;
-            }
-            orientation.setValues(event.yaw, pitch, event.roll);
-          } else {
-            // Si la UI está en portrait, fuerza horizontal
-            orientation.setValues(event.yaw, 0.0, event.roll);
-          }
+          // Forzar siempre horizontal (pitch = 0)
+          orientation.setValues(event.yaw, 0.0, event.roll);
         });
         break;
       case SensorControl.AbsoluteOrientation:
@@ -325,22 +311,8 @@ class _PanoramaState extends State<Panorama>
             Duration.microsecondsPerSecond ~/ 60;
         _orientationSubscription =
             motionSensors.orientation.listen((OrientationEvent event) {
-          final context = this.context;
-          final orientationScreen = MediaQuery.of(context).orientation;
-
-          // Si la UI está en landscape pero el sensor reporta valores de portrait (pitch muy alto o bajo)
-          // Forzamos el pitch a 0 para mantener horizontal
-          double pitch = event.pitch;
-          if (orientationScreen == Orientation.landscape) {
-            // Si el pitch está fuera del rango típico de landscape, forzamos a 0
-            if (pitch > 1.0 || pitch < -1.0) {
-              pitch = 0.0;
-            }
-            orientation.setValues(event.yaw, pitch, event.roll);
-          } else {
-            // Si la UI está en portrait, fuerza horizontal
-            orientation.setValues(event.yaw, 0.0, event.roll);
-          }
+          // Forzar siempre horizontal (pitch = 0)
+          orientation.setValues(event.yaw, 0.0, event.roll);
         });
         break;
       default:
