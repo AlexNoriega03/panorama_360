@@ -296,8 +296,8 @@ class _PanoramaState extends State<Panorama>
     _streamController.add(null);
   }
 
+  // NORIEGA WAS HERE  Ignora el roll del sensor y ponlo siempre en 0
   void _updateSensorControl() {
-    // NORIEGA WAS HERE
     _orientationSubscription?.cancel();
     switch (widget.sensorControl) {
       case SensorControl.Orientation:
@@ -305,8 +305,8 @@ class _PanoramaState extends State<Panorama>
             Duration.microsecondsPerSecond ~/ 60;
         _orientationSubscription =
             motionSensors.orientation.listen((OrientationEvent event) {
-          // Forzar siempre horizontal (pitch = 0)
-          orientation.setValues(event.yaw, 0.0, event.roll);
+          // Forzar siempre horizontal y sin inclinación lateral
+          orientation.setValues(event.yaw, 0.0, 0.0); // <-- roll en 0
         });
         break;
       case SensorControl.AbsoluteOrientation:
@@ -314,20 +314,20 @@ class _PanoramaState extends State<Panorama>
             Duration.microsecondsPerSecond ~/ 60;
         _orientationSubscription = motionSensors.absoluteOrientation
             .listen((AbsoluteOrientationEvent event) {
-          // Forzar siempre horizontal (pitch = 0)
-          orientation.setValues(event.yaw, 0.0, event.roll);
+          // Forzar siempre horizontal y sin inclinación lateral
+          orientation.setValues(event.yaw, 0.0, 0.0); // <-- roll en 0
         });
         break;
       default:
     }
 
     _screenOrientSubscription?.cancel();
-    if (widget.sensorControl != SensorControl.None) {
-      _screenOrientSubscription = motionSensors.screenOrientation
-          .listen((ScreenOrientationEvent event) {
-        screenOrientation = radians(event.angle!);
-      });
-    }
+    // if (widget.sensorControl != SensorControl.None) {
+    _screenOrientSubscription =
+        motionSensors.screenOrientation.listen((ScreenOrientationEvent event) {
+      screenOrientation = radians(event.angle!);
+    });
+    // }
   }
 
   void _updateTexture(ImageInfo imageInfo, bool synchronousCall) {
