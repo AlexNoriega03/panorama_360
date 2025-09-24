@@ -296,7 +296,7 @@ class _PanoramaState extends State<Panorama>
     _streamController.add(null);
   }
 
-  // NORIEGA WAS HERE  Ignora el roll del sensor y ponlo siempre en 0
+  // NORIEGA WAS HERE  Ignora el roll del sensor y ponlo siempre en 0 -  2
   void _updateSensorControl() {
     _orientationSubscription?.cancel();
     switch (widget.sensorControl) {
@@ -322,12 +322,12 @@ class _PanoramaState extends State<Panorama>
     }
 
     _screenOrientSubscription?.cancel();
-    // if (widget.sensorControl != SensorControl.None) {
-    _screenOrientSubscription =
-        motionSensors.screenOrientation.listen((ScreenOrientationEvent event) {
-      screenOrientation = radians(event.angle!);
-    });
-    // }
+    if (widget.sensorControl != SensorControl.None) {
+      _screenOrientSubscription = motionSensors.screenOrientation
+          .listen((ScreenOrientationEvent event) {
+        screenOrientation = radians(event.angle!);
+      });
+    }
   }
 
   void _updateTexture(ImageInfo imageInfo, bool synchronousCall) {
