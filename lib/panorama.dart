@@ -154,7 +154,7 @@ class _PanoramaState extends State<Panorama>
   double _animateDirection = 1.0;
   late AnimationController _controller;
   double screenOrientation = 0.0;
-  Vector3 orientation = Vector3(0, radians(90), 0);
+  Vector3 orientation = Vector3(0, 0, 0); // yaw, pitch, roll
   StreamSubscription? _orientationSubscription;
   StreamSubscription? _screenOrientSubscription;
   late StreamController<Null> _streamController;
@@ -243,6 +243,8 @@ class _PanoramaState extends State<Panorama>
           widget.animSpeed == 0 &&
           _controller.isAnimating) _controller.stop();
     }
+
+    orientation.y = 0.0; // NORIEGA WAS HERE
 
     // rotate for screen orientation
     Quaternion q = Quaternion.axisAngle(Vector3(0, 0, 1), screenOrientation);
