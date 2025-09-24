@@ -635,9 +635,18 @@ Vector3 quaternionToOrientation(Quaternion q) {
 }
 
 Quaternion orientationToQuaternion(Vector3 v) {
-  final Matrix4 m = Matrix4.identity();
-  m.rotateZ(v.z);
-  m.rotateX(v.y);
-  m.rotateY(v.x);
-  return Quaternion.fromRotation(m.getRotation());
+  // v.x = yaw, v.y = pitch, v.z = roll
+  final cy = math.cos(v.x * 0.5);
+  final sy = math.sin(v.x * 0.5);
+  final cp = math.cos(v.y * 0.5);
+  final sp = math.sin(v.y * 0.5);
+  final cr = math.cos(v.z * 0.5);
+  final sr = math.sin(v.z * 0.5);
+
+  final w = cr * cp * cy + sr * sp * sy;
+  final x = sr * cp * cy - cr * sp * sy;
+  final y = cr * sp * cy + sr * cp * sy;
+  final z = cr * cp * sy - sr * sp * cy;
+
+  return Quaternion(x, y, z, w);
 }
