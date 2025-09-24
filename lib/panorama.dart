@@ -305,9 +305,7 @@ class _PanoramaState extends State<Panorama>
             Duration.microsecondsPerSecond ~/ 60;
         _orientationSubscription =
             motionSensors.orientation.listen((OrientationEvent event) {
-          // Forzar siempre horizontal y sin inclinación lateral
-          orientation.setValues(
-              event.yaw, event.pitch, event.roll); // <-- roll en 0
+          orientation.setValues(event.yaw, event.pitch, event.roll);
         });
         break;
       case SensorControl.AbsoluteOrientation:
@@ -315,20 +313,14 @@ class _PanoramaState extends State<Panorama>
             Duration.microsecondsPerSecond ~/ 60;
         _orientationSubscription = motionSensors.absoluteOrientation
             .listen((AbsoluteOrientationEvent event) {
-          // Forzar siempre horizontal y sin inclinación lateral
-          orientation.setValues(event.yaw, 0.0, 0.0); // <-- roll en 0
+          orientation.setValues(event.yaw, event.pitch, event.roll);
         });
         break;
       default:
     }
 
     _screenOrientSubscription?.cancel();
-    if (widget.sensorControl != SensorControl.None) {
-      _screenOrientSubscription = motionSensors.screenOrientation
-          .listen((ScreenOrientationEvent event) {
-        screenOrientation = radians(event.angle!);
-      });
-    }
+    // NO actualices screenOrientation aquí, solo usa el valor inicial del build
   }
 
   void _updateTexture(ImageInfo imageInfo, bool synchronousCall) {
@@ -494,7 +486,7 @@ class _PanoramaState extends State<Panorama>
 
   @override
   Widget build(BuildContext context) {
-    // Inicializa screenOrientation aquí, solo la primera vez
+    // Inicializa screenOrientation aquí, solo la primera vez v2
     if (screenOrientation == 0.0 &&
         MediaQuery.of(context).size.width >
             MediaQuery.of(context).size.height) {
