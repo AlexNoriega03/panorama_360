@@ -441,24 +441,13 @@ class _PanoramaState extends State<Panorama>
 
   @override
   void initState() {
-    //NORIEGA WAS HERE Initial Modificado
     super.initState();
     latitude = degrees(widget.latitude);
     longitude = degrees(widget.longitude);
     _streamController = StreamController<Null>.broadcast();
     _stream = _streamController.stream;
 
-    // Inicializa screenOrientation según la orientación de pantalla
-    final window = WidgetsBinding.instance.platformDispatcher.views.first;
-    final size = window.physicalSize;
-    if (size.width > size.height) {
-      // Landscape
-      screenOrientation = math.pi / 2; // 90 grados
-    } else {
-      // Portrait
-      screenOrientation = 0.0;
-    }
-
+    // No inicialices screenOrientation aquí
     _updateSensorControl();
 
     _controller = AnimationController(
@@ -505,6 +494,13 @@ class _PanoramaState extends State<Panorama>
 
   @override
   Widget build(BuildContext context) {
+    // Inicializa screenOrientation aquí, solo la primera vez
+    if (screenOrientation == 0.0 &&
+        MediaQuery.of(context).size.width >
+            MediaQuery.of(context).size.height) {
+      screenOrientation = math.pi / 2;
+    }
+
     Widget pano = Stack(
       children: [
         Cube(interactive: false, onSceneCreated: _onSceneCreated),
